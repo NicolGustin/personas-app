@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\comunas;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ComunasController extends Controller
 {
@@ -14,9 +15,13 @@ class ComunasController extends Controller
      */
     public function index()
     {
-        $comunas = comunas::all();
-        // add($Comunas);
-        return view("comunas.index",["comunas"=> $comunas]);
+        //
+        //$comunas = comuna::all();
+        $comunas = DB::table('tb_comuna')
+             ->join('tb_municipio', 'tb_comuna.muni_codi', '=', 'tb_municipio.muni:codi')
+             ->select('tb_comuna.*', "tb_municipio.muni_nomb")
+             ->get();
+        return view('comuna.index', ['comunas' => $comunas]);
     }
 
     /**
